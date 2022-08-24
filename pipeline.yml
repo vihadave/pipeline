@@ -51,8 +51,8 @@ stages:
               instructions: 'Review the plan in the next hour'
   
   - stage: tfdeploy
-    condition: succeeded('tfvalidate')
-    dependsOn: tfvalidate
+    condition: succeeded('approve')
+    dependsOn: approve
     jobs:
       - job: apply
         steps:
