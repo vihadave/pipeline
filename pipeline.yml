@@ -34,6 +34,22 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'validate'
+  
+  - stage: approve
+    condition: succeeded('tfvalidate')
+    dependsOn: tfvalidate
+    displayName: Approve
+    jobs:
+      - job: approve
+        displayName: Wait for approval
+        pool: server
+        steps: 
+          - task: ManualValidation@0
+            timeoutInMinutes: 10
+            inputs:
+              notifyUsers: 'viha.dave@anblicks.com'
+              instructions: 'Review the plan in the next hour'
+  
   - stage: tfdeploy
     condition: succeeded('tfvalidate')
     dependsOn: tfvalidate
